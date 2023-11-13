@@ -58,7 +58,7 @@ app.route('/user/:user/posts')
         }
 
         if (!loggedInUser || (loggedInUser != paramsUser && app.locals.isBACProtected)) {
-            res.redirect('/');
+            return res.redirect('/');
         }
 
         let statement, params;
@@ -83,7 +83,7 @@ app.route('/user/:user/posts')
         const text = req.body.text;
 
         if (!loggedInUser || loggedInUser != paramsUser) {
-            res.redirect('/');
+            return res.redirect('/');
         }
 
         const isXSSProtected = app.locals.isXSSProtected;
