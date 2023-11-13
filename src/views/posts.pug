@@ -1,0 +1,36 @@
+html
+    head
+        title Vulnerable App
+    body
+        h2 User: #{user}
+        form(action='/logout', method='post')
+            button(type='submit') Logout
+        br
+        form(action='/', method='get')
+            button(type='submit') Back to homepage
+
+        if user !== 'admin'
+            h3 Create a post
+            form(action=`/user/${user}/posts`, method='post')
+                label(for='text') What is on your mind?
+                br
+                textarea(id='text', name='text')
+                br
+                button(type='submit') Post
+
+            h3 Your posts
+        else
+            h3 All posts
+
+        if posts && posts.length > 0
+            each post in posts
+                if user !== 'admin'
+                    if isXSSProtected
+                        p Post##{post.id}: #{post.text}
+                    else
+                        p Post##{post.id}: !{post.text}
+                else
+                    if isXSSProtected
+                        p Post##{post.id}: #{post.text} by #{post.creator}
+                    else
+                        p Post##{post.id}: !{post.text} by #{post.creator}

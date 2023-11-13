@@ -1,0 +1,36 @@
+html
+    head
+        title Vulnerable App
+    body
+        if user
+            h2 Welcome App User!
+            form(action='/logout', method='post')
+                button(type='submit') Logout
+
+            h3 1. Reflected XSS
+            form(action='/', method='get')
+                label(for='name') What is your name?
+                    input(id='name', name='name', value='<script>alert(document.cookie)</script>')
+                br
+                label(for='reflectedXSS') Turn on XSS protection
+                    input(id='reflectedXSS', name='isProtected', type='checkbox', checked)
+                br
+                button(id='reflectedXSSButton', type='submit') Say hello
+            if isProtected && name
+                p Hello #{name}
+            else if name
+                p Hello !{name}
+
+            h3 2. Stored XSS and Broken Access Control
+            form(action=`/user/${user}/posts`, method='get')
+                label(for='storedXSS') Turn on XSS protection
+                    input(id='storedXSS', name='isXSSProtected', type='checkbox', checked)
+                br
+                label(for='brokenAccessControl') Turn on BAC protection
+                    input(id='brokenAccessControl', name='isBACProtected', type='checkbox', checked)
+                br
+                button(id='XSSAndBACButton', type='submit') See your posts
+        else
+            p Please log in
+            form(action='/login', method='post')
+                button(type='submit') Login
